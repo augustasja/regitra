@@ -33,7 +33,7 @@ const FilterDropdown = () => {
         options={classificators || []}
         getOptionLabel={(option) => option.name}
         sx={{ width: 300 }}
-        onChange={(_, value) => setSearch(value?.code || null)}
+        onChange={(_, value) => setSearch(value?.code || "")}
         value={classificators?.find((c) => c.code === search) || null}
         noOptionsText="Nerasta"
         renderInput={(params) => (

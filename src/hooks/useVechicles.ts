@@ -22,11 +22,15 @@ const useVechicles = (failCall: boolean = false) => {
   );
 
   const getVechicle = useQuery({
-    queryKey: GET_VECHICLE_INFO(selectedVehicleId),
+    queryKey: selectedVehicleId
+      ? GET_VECHICLE_INFO(selectedVehicleId)
+      : ["vehicle-info", "disabled"],
     queryFn: ({ signal }) =>
-      getVechicleInfo(selectedVehicleId, failCall, signal),
+      selectedVehicleId !== null
+        ? getVechicleInfo(selectedVehicleId, failCall, signal)
+        : Promise.reject("No vehicle selected"),
     retry: false,
-    enabled: !!selectedVehicleId,
+    enabled: selectedVehicleId !== null,
     staleTime: 1000 * 60 * 1, // 1min cache.
   });
 
@@ -45,7 +49,7 @@ const useVechicles = (failCall: boolean = false) => {
         anchorOrigin: { vertical: "top", horizontal: "right" },
       });
     },
-    onError: (err) => {
+    onError: () => {
       enqueueSnackbar("Įrašo ištrynimas nepavyko!", {
         variant: "error",
         anchorOrigin: { vertical: "top", horizontal: "right" },
