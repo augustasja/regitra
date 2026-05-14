@@ -23,7 +23,8 @@ const useVechicles = (failCall: boolean = false) => {
 
   const getVechicle = useQuery({
     queryKey: GET_VECHICLE_INFO(selectedVehicleId),
-    queryFn: () => getVechicleInfo(selectedVehicleId, failCall),
+    queryFn: ({ signal }) =>
+      getVechicleInfo(selectedVehicleId, failCall, signal),
     retry: false,
     enabled: !!selectedVehicleId,
     staleTime: 1000 * 60 * 1, // 1min cache.
