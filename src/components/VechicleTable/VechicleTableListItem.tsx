@@ -47,7 +47,7 @@ const VechicleTableListItem = ({
             size="small"
             onClick={() => onRemove(row.id)}
             disabled={removeDisabled}
-            loading={removeDisabled}
+            loading={removeDisabled && !viewDisabled}
           >
             Panaikinti
           </Button>

@@ -8,7 +8,7 @@ import Paper from "@mui/material/Paper";
 
 import type { VechicleList } from "../../lib/types";
 import VechicleTableListItem from "./VechicleTableListItem";
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { lazy } from "react";
 import useVechicles from "../../hooks/useVechicles";
 import { useTableFilters } from "../../hooks/useTableFilters";
@@ -38,6 +38,14 @@ const VechicleTable = ({ rows }: Props) => {
     deleteMutation.mutate(id);
   };
 
+  const filteredRows = useMemo(
+    () =>
+      rows.filter((row) =>
+        row.code.toLowerCase().includes(search.toLocaleLowerCase()),
+      ),
+    [rows, search],
+  );
+
   return (
     <Paper className="w-full overflow-hidden">
       <TableContainer className="max-h-[740px] overflow-auto">
@@ -51,32 +59,35 @@ const VechicleTable = ({ rows }: Props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .filter((row) =>
-                row.code.toLowerCase().includes(search.toLocaleLowerCase()),
-              )
-              .map((row) => {
-                const isViewing =
-                  getVechicle.isLoading && selectedVehicleId === row.id;
-                const isDeleting =
-                  deleteMutation.isPending && deletingVehicleId === row.id;
+            {filteredRows.map((row) => {
+              const isViewing =
+                getVechicle.isLoading && selectedVehicleId === row.id;
+              const isDeleting =
+                deleteMutation.isPending && deletingVehicleId === row.id;
 
-                return (
-                  <VechicleTableListItem
-                    key={row.id}
-                    row={row}
-                    onView={setSelectedVehicleId}
-                    onRemove={handleOnRemove}
-                    viewDisabled={isViewing}
-                    removeDisabled={isDeleting}
-                  />
-                );
-              })}
+              return (
+                <VechicleTableListItem
+                  key={row.id}
+                  row={row}
+                  onView={setSelectedVehicleId}
+                  onRemove={handleOnRemove}
+                  viewDisabled={isViewing}
+                  removeDisabled={isDeleting || isViewing}
+                />
+              );
+            })}
+            {filteredRows.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={4} align="center">
+                  Nėra transporto priemonių su šiuo klasifikatoriumi.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
       {selectedVehicleId && getVechicle.data && (
-        <Suspense>
+        <Suspense fallback={null}>
           <VechicleInfoModal
             open={!!selectedVehicleId}
             onClose={() => setSelectedVehicleId(null)}

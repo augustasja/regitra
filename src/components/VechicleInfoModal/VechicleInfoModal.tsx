@@ -54,16 +54,16 @@ const VechicleInfoModal = ({ open, onClose, data }: Props) => {
         <Divider sx={{ mb: 2 }} />
 
         <Typography id="modal-modal-model" sx={{ mt: 0.5 }}>
-          <strong>Model:</strong> {data.model}
+          <strong>Modelis:</strong> {data.model}
         </Typography>
         <Typography id="modal-modal-year" sx={{ mt: 1 }}>
-          <strong>Year:</strong> {data.year}
+          <strong>Metai:</strong> {data.year}
         </Typography>
         <Typography id="modal-modal-registration-number" sx={{ mt: 1 }}>
-          <strong>Registration:</strong> {data.regNr}
+          <strong>Valstybinis numeris:</strong> {data.regNr}
         </Typography>
         <Typography id="modal-modal-code" sx={{ mt: 1 }}>
-          <strong>Code:</strong> {data.code}
+          <strong>Klasifikatorius:</strong> {data.code}
         </Typography>
       </Box>
     </Modal>

@@ -35,17 +35,14 @@ const FilterDropdown = () => {
     >
       <Autocomplete
         disablePortal
-        options={classificators.map((option) => option.code)}
+        options={classificators || []}
+        getOptionLabel={(option) => option.name}
         sx={{ width: 300 }}
-        onChange={(_, value) => setSearch(value)}
-        value={search}
+        onChange={(_, value) => setSearch(value?.code || null)}
+        value={classificators?.find((c) => c.code === search) || null}
+        noOptionsText="Nerasta"
         renderInput={(params) => (
-          <TextField
-            {...params}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            label="Klasifikatorius"
-          />
+          <TextField {...params} label="Klasifikatorius" value={search} />
         )}
       />
     </Paper>
