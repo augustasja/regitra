@@ -1,6 +1,6 @@
 # Setup instructions
 
-Docker daemon must be present.
+Docker daemon must be present. Use docker desktop for simplicity
 
 1. Navigate to project folder and run:
    `docker build -t vite-app .`
