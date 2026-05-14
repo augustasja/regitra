@@ -1,6 +1,6 @@
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import type { VechicleListItem } from "../../lib/types";
 
 type Props = {
@@ -24,26 +24,34 @@ const VechicleTableListItem = ({
       <TableCell>{row.regNr}</TableCell>
       <TableCell>{row.code}</TableCell>
       <TableCell align="right">
-        <Button
-          variant="contained"
-          className="mr-2"
-          size="small"
-          onClick={() => onView(row.id)}
-          disabled={viewDisabled}
-          loading={viewDisabled}
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            justifyContent: "flex-end",
+            flexWrap: "wrap",
+          }}
         >
-          Peržiūrėti
-        </Button>
-        <Button
-          variant="contained"
-          color="error"
-          size="small"
-          onClick={() => onRemove(row.id)}
-          disabled={removeDisabled}
-          loading={removeDisabled}
-        >
-          Panaikinti
-        </Button>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => onView(row.id)}
+            disabled={viewDisabled}
+            loading={viewDisabled}
+          >
+            Peržiūrėti
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            size="small"
+            onClick={() => onRemove(row.id)}
+            disabled={removeDisabled}
+            loading={removeDisabled}
+          >
+            Panaikinti
+          </Button>
+        </Box>
       </TableCell>
     </TableRow>
   );

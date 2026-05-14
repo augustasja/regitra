@@ -11,7 +11,7 @@ import VechicleTableListItem from "./VechicleTableListItem";
 import { Suspense } from "react";
 import { lazy } from "react";
 import useVechicles from "../../hooks/useVechicles";
-import Snackbar from "@mui/material/Snackbar";
+import { useTableFilters } from "../../hooks/useTableFilters";
 
 const VechicleInfoModal = lazy(
   () => import("../VechicleInfoModal/VechicleInfoModal"),
@@ -22,6 +22,8 @@ type Props = {
 };
 
 const VechicleTable = ({ rows }: Props) => {
+  const { search } = useTableFilters();
+
   const {
     getVechicle,
     deleteMutation,
@@ -44,28 +46,32 @@ const VechicleTable = ({ rows }: Props) => {
             <TableRow>
               <TableCell>#</TableCell>
               <TableCell>Valstybinis numeris</TableCell>
-              <TableCell>Kodas</TableCell>
+              <TableCell>Klasifikatorius</TableCell>
               <TableCell align="right">Veiksmai</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => {
-              const isViewing =
-                getVechicle.isLoading && selectedVehicleId === row.id;
-              const isDeleting =
-                deleteMutation.isPending && deletingVehicleId === row.id;
+            {rows
+              .filter((row) =>
+                row.code.toLowerCase().includes(search.toLocaleLowerCase()),
+              )
+              .map((row) => {
+                const isViewing =
+                  getVechicle.isLoading && selectedVehicleId === row.id;
+                const isDeleting =
+                  deleteMutation.isPending && deletingVehicleId === row.id;
 
-              return (
-                <VechicleTableListItem
-                  key={row.id}
-                  row={row}
-                  onView={setSelectedVehicleId}
-                  onRemove={handleOnRemove}
-                  viewDisabled={isViewing}
-                  removeDisabled={isDeleting}
-                />
-              );
-            })}
+                return (
+                  <VechicleTableListItem
+                    key={row.id}
+                    row={row}
+                    onView={setSelectedVehicleId}
+                    onRemove={handleOnRemove}
+                    viewDisabled={isViewing}
+                    removeDisabled={isDeleting}
+                  />
+                );
+              })}
           </TableBody>
         </Table>
       </TableContainer>

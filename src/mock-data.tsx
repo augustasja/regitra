@@ -96,7 +96,7 @@ export const vechicleInfo: VechicleInfo[] = [
   },
 ];
 
-export const filter: FilterItem[] = [
+export const classificators: FilterItem[] = [
   {
     code: "CAR",
     name: "Lengvasis automobilis",

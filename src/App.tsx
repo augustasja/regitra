@@ -3,6 +3,7 @@ import { getVechicleList } from "./services/store";
 import { GET_VECHICLE_LIST } from "./lib/query-keys";
 import { CircularProgress } from "@mui/material";
 import VechicleTable from "./components/VechicleTable/VechicleTable";
+import FilterDropdown from "./components/FilterDropdown/FilterDropdown";
 
 function App() {
   const { data, isLoading, isError, error } = useQuery({
@@ -22,7 +23,10 @@ function App() {
   return (
     <section className="py-5">
       {data && data.length > 0 ? (
-        <VechicleTable rows={data} />
+        <>
+          <FilterDropdown />
+          <VechicleTable rows={data} />
+        </>
       ) : (
         <p>No vehicles found.</p>
       )}
