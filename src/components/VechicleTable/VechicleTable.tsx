@@ -12,6 +12,8 @@ import { Suspense, useMemo } from "react";
 import { lazy } from "react";
 import useVechicles from "../../hooks/useVechicles";
 import { useTableFilters } from "../../hooks/useTableFilters";
+import { useFailToggleContext } from "../../providers/FailToggleProvider";
+import { enqueueSnackbar, useSnackbar } from "notistack";
 
 const VechicleInfoModal = lazy(
   () => import("../VechicleInfoModal/VechicleInfoModal"),
@@ -24,6 +26,8 @@ type Props = {
 const VechicleTable = ({ rows }: Props) => {
   const { search } = useTableFilters();
 
+  const { fail } = useFailToggleContext();
+
   const {
     getVechicle,
     deleteMutation,
@@ -31,7 +35,7 @@ const VechicleTable = ({ rows }: Props) => {
     deletingVehicleId,
     setSelectedVehicleId,
     setDeletingVehicleId,
-  } = useVechicles();
+  } = useVechicles(fail);
 
   const handleOnRemove = (id: number) => {
     setDeletingVehicleId(id);
