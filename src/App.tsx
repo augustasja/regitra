@@ -2,12 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { getVechicleList } from "./services/store";
 import { GET_VECHICLE_LIST } from "./lib/query-keys";
 import { CircularProgress } from "@mui/material";
-import type { VechicleList } from "./lib/types";
+import VechicleTable from "./components/VechicleTable/VechicleTable";
 
 function App() {
-  const { data, isLoading, isError, error } = useQuery<VechicleList>({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: GET_VECHICLE_LIST,
-    queryFn: () => getVechicleList(true),
+    queryFn: () => getVechicleList(),
     retry: false,
   });
 
@@ -22,9 +22,7 @@ function App() {
   return (
     <section className="py-5">
       {data && data.length > 0 ? (
-        (data as VechicleList).map((item) => (
-          <div key={item.regNr}>{item.regNr}</div>
-        ))
+        <VechicleTable rows={data} />
       ) : (
         <p>No vehicles found.</p>
       )}

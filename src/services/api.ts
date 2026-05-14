@@ -34,7 +34,7 @@ export function mockDelete<T extends { id: number }>(
   data: T[],
   id: number,
   fail: boolean,
-): Promise<void> {
+): Promise<T> {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const itemIndex = data.findIndex((x) => x.id === id);
@@ -42,8 +42,7 @@ export function mockDelete<T extends { id: number }>(
       if (itemIndex === -1 || fail) {
         reject(new Error(`Item with id ${id} not found`));
       } else {
-        data.splice(itemIndex, 1);
-        resolve();
+        resolve(data[itemIndex]);
       }
     }, DELAY);
   });
