@@ -1,6 +1,8 @@
+import { Box, Button } from "@mui/material";
+
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import { Box, Button } from "@mui/material";
+
 import type { VechicleListItem } from "../../lib/types";
 
 type Props = {

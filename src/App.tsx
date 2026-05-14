@@ -2,9 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { getVechicleList } from "./services/store";
 import { GET_VECHICLE_LIST } from "./lib/query-keys";
 import { Box, CircularProgress, FormControlLabel, Switch } from "@mui/material";
+import { useFailToggleContext } from "./providers/FailToggleProvider";
+
 import VechicleTable from "./components/VechicleTable/VechicleTable";
 import FilterDropdown from "./components/FilterDropdown/FilterDropdown";
-import { useFailToggleContext } from "./providers/FailToggleProvider";
 
 function App() {
   const { fail, setFail } = useFailToggleContext();
@@ -24,7 +25,7 @@ function App() {
   }
 
   return (
-    <section className="py-5">
+    <Box component="section" sx={{ paddingY: 4 }}>
       {data && data.length > 0 ? (
         <>
           <Box
@@ -52,7 +53,7 @@ function App() {
       ) : (
         <p>No vehicles found.</p>
       )}
-    </section>
+    </Box>
   );
 }
 

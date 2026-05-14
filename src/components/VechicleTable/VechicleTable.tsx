@@ -1,3 +1,6 @@
+import { lazy } from "react";
+import { Suspense, useMemo } from "react";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -5,15 +8,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-
-import type { VechicleList } from "../../lib/types";
 import VechicleTableListItem from "./VechicleTableListItem";
-import { Suspense, useMemo } from "react";
-import { lazy } from "react";
+
 import useVechicles from "../../hooks/useVechicles";
+import type { VechicleList } from "../../lib/types";
 import { useTableFilters } from "../../hooks/useTableFilters";
 import { useFailToggleContext } from "../../providers/FailToggleProvider";
-import { enqueueSnackbar, useSnackbar } from "notistack";
 
 const VechicleInfoModal = lazy(
   () => import("../VechicleInfoModal/VechicleInfoModal"),
@@ -51,8 +51,18 @@ const VechicleTable = ({ rows }: Props) => {
   );
 
   return (
-    <Paper className="w-full overflow-hidden">
-      <TableContainer className="max-h-[740px] overflow-auto">
+    <Paper
+      sx={{
+        width: "100%",
+        overflow: "hidden",
+      }}
+    >
+      <TableContainer
+        sx={{
+          maxHeight: "740px",
+          overflow: "auto",
+        }}
+      >
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>

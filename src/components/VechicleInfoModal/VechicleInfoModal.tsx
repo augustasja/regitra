@@ -1,7 +1,7 @@
 import { Box, Modal, Typography, IconButton, Divider } from "@mui/material";
-// Kažkodėl ts compiler neveikia mui/icons
-// @ts-ignore-next-line
+
 import CloseIcon from "@mui/icons-material/Close";
+
 import type { VechicleInfo } from "../../lib/types";
 
 type Props = {
