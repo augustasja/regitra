@@ -8,15 +8,10 @@ import Paper from "@mui/material/Paper";
 
 import type { VechicleList } from "../../lib/types";
 import VechicleTableListItem from "./VechicleTableListItem";
-import {
-  DELETE_VEHICLE,
-  GET_VECHICLE_INFO,
-  GET_VECHICLE_LIST,
-} from "../../lib/query-keys";
-import { deleteVechicle, getVechicleInfo } from "../../services/store";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import { lazy } from "react";
+import useVechicles from "../../hooks/useVechicles";
+import Snackbar from "@mui/material/Snackbar";
 
 const VechicleInfoModal = lazy(
   () => import("../VechicleInfoModal/VechicleInfoModal"),
@@ -27,47 +22,18 @@ type Props = {
 };
 
 const VechicleTable = ({ rows }: Props) => {
-  const [selectedVehicleId, setSelectedVehicleId] = useState<number | null>(
-    null,
-  );
-  const [deletingVehicleId, setDeletingVehicleId] = useState<number | null>(
-    null,
-  );
-
-  const queryClient = useQueryClient();
-
   const {
-    data: vechicleInfo,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: GET_VECHICLE_INFO(selectedVehicleId),
-    queryFn: () => getVechicleInfo(selectedVehicleId),
-    retry: false,
-    enabled: !!selectedVehicleId,
-  });
-
-  const { mutate, isPending } = useMutation({
-    mutationKey: DELETE_VEHICLE,
-    mutationFn: (id: number) => deleteVechicle(id),
-    retry: false,
-
-    onSuccess: (removedVechicle) => {
-      queryClient.setQueryData<VechicleList>(GET_VECHICLE_LIST, (old) =>
-        old ? old.filter((v) => v.id !== removedVechicle.id) : [],
-      );
-      setDeletingVehicleId(null);
-    },
-    onError: (err) => {
-      console.error("Error deleting vehicle:", err);
-      setDeletingVehicleId(null);
-    },
-  });
+    getVechicle,
+    deleteMutation,
+    selectedVehicleId,
+    deletingVehicleId,
+    setSelectedVehicleId,
+    setDeletingVehicleId,
+  } = useVechicles();
 
   const handleOnRemove = (id: number) => {
     setDeletingVehicleId(id);
-    mutate(id);
+    deleteMutation.mutate(id);
   };
 
   return (
@@ -84,8 +50,10 @@ const VechicleTable = ({ rows }: Props) => {
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              const isViewing = isLoading && selectedVehicleId === row.id;
-              const isDeleting = isPending && deletingVehicleId === row.id;
+              const isViewing =
+                getVechicle.isLoading && selectedVehicleId === row.id;
+              const isDeleting =
+                deleteMutation.isPending && deletingVehicleId === row.id;
 
               return (
                 <VechicleTableListItem
@@ -101,12 +69,12 @@ const VechicleTable = ({ rows }: Props) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {selectedVehicleId && vechicleInfo && (
+      {selectedVehicleId && getVechicle.data && (
         <Suspense>
           <VechicleInfoModal
             open={!!selectedVehicleId}
             onClose={() => setSelectedVehicleId(null)}
-            data={vechicleInfo}
+            data={getVechicle.data}
           />
         </Suspense>
       )}

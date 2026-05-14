@@ -4,7 +4,7 @@ export function mockGet<T>(data: T, fail: boolean): Promise<T> {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (fail) {
-        reject(new Error("Forced error"));
+        reject(new Error("Simulating API failure"));
       } else {
         resolve(data);
       }
@@ -19,10 +19,14 @@ export function mockGetById<T extends { id: number }>(
 ): Promise<T> {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
+      console.log("Pirmas API call, poto 1min cahce tam pačiam id");
+
       const item = data.find((x) => x.id === id);
 
       if (!item || fail) {
-        reject(new Error(`Item with id ${id} not found`));
+        reject(
+          new Error(`Simulating API failure: Item with id ${id} not found`),
+        );
       } else {
         resolve(item);
       }
@@ -40,7 +44,9 @@ export function mockDelete<T extends { id: number }>(
       const itemIndex = data.findIndex((x) => x.id === id);
 
       if (itemIndex === -1 || fail) {
-        reject(new Error(`Item with id ${id} not found`));
+        reject(
+          new Error(`Simulating API failure: Item with id ${id} not found`),
+        );
       } else {
         resolve(data[itemIndex]);
       }
