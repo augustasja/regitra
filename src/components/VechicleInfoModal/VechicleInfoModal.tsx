@@ -1,5 +1,4 @@
 import { Box, Modal, Typography, IconButton, Divider } from "@mui/material";
-
 import CloseIcon from "@mui/icons-material/Close";
 
 import type { VechicleInfo } from "../../lib/types";
@@ -29,7 +28,7 @@ const VechicleInfoModal = ({ open, onClose, data }: Props) => {
           color: "text.primary",
           borderRadius: 2,
           boxShadow: 24,
-          p: 3,
+          p: 4,
           outline: "none",
         }}
       >
@@ -37,7 +36,7 @@ const VechicleInfoModal = ({ open, onClose, data }: Props) => {
           aria-label="close"
           onClick={onClose}
           sx={{ position: "absolute", right: 8, top: 8 }}
-          size="large"
+          size="small"
         >
           <CloseIcon />
         </IconButton>
@@ -46,25 +45,27 @@ const VechicleInfoModal = ({ open, onClose, data }: Props) => {
           id="modal-modal-make"
           variant="h6"
           component="h2"
-          sx={{ mb: 1, fontWeight: 600 }}
+          sx={{ mb: 2, fontWeight: 700, color: "var(--accent)" }}
         >
           {data.make}
         </Typography>
 
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 3 }} />
 
-        <Typography id="modal-modal-model" sx={{ mt: 0.5 }}>
-          <strong>Modelis:</strong> {data.model}
-        </Typography>
-        <Typography id="modal-modal-year" sx={{ mt: 1 }}>
-          <strong>Metai:</strong> {data.year}
-        </Typography>
-        <Typography id="modal-modal-registration-number" sx={{ mt: 1 }}>
-          <strong>Valstybinis numeris:</strong> {data.regNr}
-        </Typography>
-        <Typography id="modal-modal-code" sx={{ mt: 1 }}>
-          <strong>Klasifikatorius:</strong> {data.code}
-        </Typography>
+        <Box sx={{ display: "grid", gap: 2 }}>
+          <Typography sx={{ display: "flex", justifyContent: "space-between" }}>
+            <span style={{ fontWeight: 600 }}>Modelis:</span> {data.model}
+          </Typography>
+          <Typography sx={{ display: "flex", justifyContent: "space-between" }}>
+            <span style={{ fontWeight: 600 }}>Metai:</span> {data.year}
+          </Typography>
+          <Typography sx={{ display: "flex", justifyContent: "space-between" }}>
+            <span style={{ fontWeight: 600 }}>Valstybinis numeris:</span> {data.regNr}
+          </Typography>
+          <Typography sx={{ display: "flex", justifyContent: "space-between" }}>
+            <span style={{ fontWeight: 600 }}>Klasifikatorius:</span> {data.code}
+          </Typography>
+        </Box>
       </Box>
     </Modal>
   );

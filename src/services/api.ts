@@ -8,7 +8,7 @@ export function mockGet<T>(
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       if (fail) {
-        reject(new Error("Simulating API failure"));
+        reject(new Error("API fail simuliacija"));
       } else {
         resolve(data);
       }
@@ -35,7 +35,9 @@ export function mockGetById<T extends { id: number }>(
 
       if (!item || fail) {
         reject(
-          new Error(`Simulating API failure: Item with id ${id} not found`),
+          new Error(
+            `API fail simuliacija: Jeigu matomas modal, tai jis rodomas is cache`,
+          ),
         );
       } else {
         resolve(item);
@@ -59,9 +61,7 @@ export function mockDelete<T extends { id: number }>(
       const itemIndex = data.findIndex((x) => x.id === id);
 
       if (itemIndex === -1 || fail) {
-        reject(
-          new Error(`Simulating API failure: Item with id ${id} not found`),
-        );
+        reject(new Error(`API fail simuliacija`));
       } else {
         resolve(data[itemIndex]);
       }

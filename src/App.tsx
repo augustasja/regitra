@@ -1,7 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { getVechicleList } from "./services/store";
 import { GET_VECHICLE_LIST } from "./lib/query-keys";
-import { Box, CircularProgress, FormControlLabel, Switch } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  FormControlLabel,
+  Switch,
+  Typography,
+} from "@mui/material";
 import { useFailToggleContext } from "./providers/FailToggleProvider";
 
 import VechicleTable from "./components/VechicleTable/VechicleTable";
@@ -10,48 +16,67 @@ import FilterDropdown from "./components/FilterDropdown/FilterDropdown";
 function App() {
   const { fail, setFail } = useFailToggleContext();
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: GET_VECHICLE_LIST,
     queryFn: () => getVechicleList(),
     retry: false,
   });
 
   if (isLoading) {
-    return <CircularProgress aria-label="Loading…" />;
-  }
-
-  if (isError) {
-    return <p>Error loading vehicles: {(error as Error).message}</p>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <CircularProgress aria-label="Loading…" />
+      </Box>
+    );
   }
 
   return (
-    <Box component="section" sx={{ paddingY: 4 }}>
+    <Box component="section" sx={{ py: 4, px: 2 }}>
       {data && data.length > 0 ? (
         <>
           <Box
-            component={"div"}
             sx={{
-              marginBottom: 2,
+              mb: 4,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 2,
             }}
           >
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: 600, color: "text.primary" }}
+            >
+              Transporto priemonės
+            </Typography>
             <FormControlLabel
-              sx={{
-                marginLeft: 2,
-              }}
               control={
                 <Switch
                   checked={fail}
                   onChange={(e) => setFail(e.target.checked)}
                 />
               }
-              label="Įjungti klaidos režimą"
+              label="Klaidos režimas"
             />
           </Box>
-          <FilterDropdown />
+          <Box sx={{ mb: 3 }}>
+            <FilterDropdown />
+          </Box>
           <VechicleTable rows={data} />
         </>
       ) : (
-        <p>No vehicles found.</p>
+        <Box sx={{ py: 4, textAlign: "center" }}>
+          <Typography color="text.secondary">
+            Nerasta transporto priemonių.
+          </Typography>
+        </Box>
       )}
     </Box>
   );

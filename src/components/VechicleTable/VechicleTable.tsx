@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 import { Suspense, useMemo } from "react";
 
 import Table from "@mui/material/Table";
@@ -8,6 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Typography, Box } from "@mui/material";
 import VechicleTableListItem from "./VechicleTableListItem";
 
 import useVechicles from "../../hooks/useVechicles";
@@ -25,7 +26,6 @@ type Props = {
 
 const VechicleTable = ({ rows }: Props) => {
   const { search } = useTableFilters();
-
   const { fail } = useFailToggleContext();
 
   const {
@@ -36,6 +36,14 @@ const VechicleTable = ({ rows }: Props) => {
     setSelectedVehicleId,
     setDeletingVehicleId,
   } = useVechicles(fail);
+
+  const { isError } = getVechicle;
+
+  useEffect(() => {
+    if (isError) {
+      setSelectedVehicleId(null);
+    }
+  }, [isError, setSelectedVehicleId]);
 
   const handleOnRemove = (id: number) => {
     setDeletingVehicleId(id);
@@ -55,6 +63,8 @@ const VechicleTable = ({ rows }: Props) => {
       sx={{
         width: "100%",
         overflow: "hidden",
+        borderRadius: 2,
+        boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
       }}
     >
       <TableContainer
@@ -65,17 +75,21 @@ const VechicleTable = ({ rows }: Props) => {
       >
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
-            <TableRow>
-              <TableCell>#</TableCell>
-              <TableCell>Valstybinis numeris</TableCell>
-              <TableCell>Klasifikatorius</TableCell>
-              <TableCell align="right">Veiksmai</TableCell>
+            <TableRow sx={{ backgroundColor: "var(--code-bg)" }}>
+              <TableCell sx={{ fontWeight: 600 }}>#</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>
+                Valstybinis numeris
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Klasifikatorius</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 600 }}>
+                Veiksmai
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredRows.map((row) => {
               const isViewing =
-                getVechicle.isLoading && selectedVehicleId === row.id;
+                getVechicle.isFetching && selectedVehicleId === row.id;
               const isDeleting =
                 deleteMutation.isPending && deletingVehicleId === row.id;
 
@@ -92,8 +106,12 @@ const VechicleTable = ({ rows }: Props) => {
             })}
             {filteredRows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={4} align="center">
-                  Nėra transporto priemonių su šiuo klasifikatoriumi.
+                <TableCell colSpan={4}>
+                  <Box sx={{ py: 4, textAlign: "center" }}>
+                    <Typography color="text.secondary">
+                      Nėra transporto priemonių su šiuo klasifikatoriumi.
+                    </Typography>
+                  </Box>
                 </TableCell>
               </TableRow>
             )}

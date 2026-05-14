@@ -12,18 +12,13 @@ import { useTableFilters } from "../../hooks/useTableFilters";
 const FilterDropdown = () => {
   const { search, setSearch } = useTableFilters();
 
-  const {
-    data: classificators,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { data: classificators, isLoading } = useQuery({
     queryKey: GET_CLASIFICATORS,
     queryFn: () => getClassificators(),
   });
 
   if (isLoading) {
-    return <CircularProgress aria-label="Loading…" />;
+    return <CircularProgress aria-label="Loading…" size={24} />;
   }
 
   return (
